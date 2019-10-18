@@ -1,8 +1,8 @@
 <?php
 
+require __DIR__ . '/../bootstrap.php';
 
-include("../anticaptcha.php");
-include("../geetestproxyless.php");
+use CaptchaSolvers\AntiCaptcha\GeeTestProxyless;
 
 $api = new GeeTestProxyless();
 $api->setVerboseMode(true);
@@ -32,7 +32,7 @@ $api->setAPISubdomain("api-na.geetest.com");
 
 
 if (!$api->createTask()) {
-    $api->debout("API v2 send failed - ".$api->getErrorMessage(), "red");
+    $api->debout("API v2 send failed - " . $api->getErrorMessage(), "red");
     return false;
 }
 
@@ -48,13 +48,14 @@ if (!$api->waitForResult()) {
 }
 
 
-function getChallenge() {
-    
-    
-    $ch=curl_init();
-    curl_setopt($ch,CURLOPT_URL, "https://www.ticketmaster.com/distil_r_captcha_challenge");
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-    curl_setopt($ch,CURLOPT_HTTPHEADER, [
+function getChallenge()
+{
+
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://www.ticketmaster.com/distil_r_captcha_challenge");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
         "Accept: text/html,application/xhtml+xml,application/xml;q=0.9;q=0.8",
         "Accept-Encoding: deflate",
         "Accept-Language: en-US,en;q=0.5",
@@ -62,19 +63,20 @@ function getChallenge() {
         "Connection: keep-alive",
         "Host: www.ticketmaster.com"
     ]);
-    curl_setopt($ch,CURLOPT_USERAGENT, "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:50.0) Gecko/20100101 Firefox/50.0");
-    curl_setopt($ch,CURLOPT_HEADER,0);
-    curl_setopt($ch,CURLOPT_TIMEOUT,10);
-    $result =curl_exec($ch);
+    curl_setopt($ch, CURLOPT_USERAGENT,
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:50.0) Gecko/20100101 Firefox/50.0");
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    $result = curl_exec($ch);
     $curlError = curl_error($ch);
     curl_close($ch);
-    
+
     if ($curlError != "") {
         echo "Got HTTP error: $curlError\n";
         exit;
     }
-    return substr($result, 0, strpos($result,";"));
-    
+    return substr($result, 0, strpos($result, ";"));
+
 }
 
 

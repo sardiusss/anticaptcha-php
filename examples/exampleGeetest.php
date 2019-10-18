@@ -1,8 +1,8 @@
 <?php
 
+require __DIR__ . '/../bootstrap.php';
 
-include("../anticaptcha.php");
-include("../geetestproxyless.php");
+use CaptchaSolvers\AntiCaptcha\GeeTestProxyless;
 
 $api = new GeeTestProxyless();
 $api->setVerboseMode(true);
@@ -13,7 +13,8 @@ echo "\nThis example will solve official demo geetest captcha from https://www.g
 $api->setKey(readline("You API key: "));
 
 echo "grabbing challenge key ... \n";
-$data = json_decode(file_get_contents("https://www.geetest.com/demo/gt/register-enIcon-official?t=1547634498036"), true);
+$data = json_decode(file_get_contents("https://www.geetest.com/demo/gt/register-enIcon-official?t=1547634498036"),
+    true);
 
 echo "grabbed data:\n";
 print_r($data);
@@ -23,8 +24,8 @@ if (!isset($data["gt"]) && !isset($data["challange"])) {
     exit;
 }
 
-$challenge  =   $data["challenge"];
-$gt         =   $data["gt"];
+$challenge = $data["challenge"];
+$gt = $data["gt"];
 
 echo "setting gt=$gt, challenge=$challenge\n";
 
@@ -34,7 +35,7 @@ $api->setChallenge($challenge);
 
 
 if (!$api->createTask()) {
-    $api->debout("API v2 send failed - ".$api->getErrorMessage(), "red");
+    $api->debout("API v2 send failed - " . $api->getErrorMessage(), "red");
     return false;
 }
 

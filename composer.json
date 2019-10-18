@@ -1,0 +1,17 @@
+{
+    "name": "vkey/anti-captcha",
+    "description": "PHP SDK for https://anti-captcha.com/",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vkey"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CaptchaSolvers\\AntiCaptcha\\": "src/"
+        }
+    },
+    "require": {}
+}

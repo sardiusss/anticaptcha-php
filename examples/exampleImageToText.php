@@ -1,11 +1,12 @@
 <?php
 
-include("../anticaptcha.php");
-include("../imagetotext.php");
+require __DIR__ . '/../bootstrap.php';
+
+use CaptchaSolvers\AntiCaptcha\ImageToText;
 
 $api = new ImageToText();
 $api->setVerboseMode(true);
-        
+
 //your anti-captcha.com account key
 $api->setKey(readline("You API key: "));
 
@@ -13,7 +14,7 @@ $api->setKey(readline("You API key: "));
 $api->setFile("capcha.jpg");
 
 if (!$api->createTask()) {
-    $api->debout("API v2 send failed - ".$api->getErrorMessage(), "red");
+    $api->debout("API v2 send failed - " . $api->getErrorMessage(), "red");
     return false;
 }
 
@@ -24,6 +25,6 @@ if (!$api->waitForResult()) {
     $api->debout("could not solve captcha", "red");
     $api->debout($api->getErrorMessage());
 } else {
-    $captchaText    =   $api->getTaskSolution();
+    $captchaText = $api->getTaskSolution();
     echo "\nresult: $captchaText\n\n";
 }
